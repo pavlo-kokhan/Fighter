@@ -31,7 +31,7 @@ const keys = {
 }
 
 class Sprite {
-    constructor({ position, velocity, color, moveSpeed, jumpSpeed }) {
+    constructor({ position, velocity, color, moveSpeed, jumpSpeed, offset }) {
         this.width = 50
         this.height = 150
         this.position = position
@@ -40,15 +40,38 @@ class Sprite {
         this.color = color
         this.moveSpeed = moveSpeed
         this.jumpSpeed = jumpSpeed
+        this.attackBlock = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
+            width: 100,
+            height: 51
+        }
+        this.isAttacking = false
     }
 
     draw() {
         context.fillStyle = this.color
         context.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+        // attack block draw
+        if (this.isAttacking) {
+            context.fillStyle = 'gray'
+            context.fillRect(
+                this.attackBlock.position.x,
+                this.attackBlock.position.y,
+                this.attackBlock.width,
+                this.attackBlock.height
+            )
+        }
     }
 
     update() {
         this.draw()
+        this.attackBlock.position.x = this.position.x + this.attackBlock.offset.x
+        this.attackBlock.position.y = this.position.y
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -59,6 +82,22 @@ class Sprite {
             this.velocity.y += gravity
         }
     }
+
+    attack() {
+        this.isAttacking = true
+        setTimeout(() => {
+            this.isAttacking = false
+        }, 100)
+    }
+}
+
+const rectangularCollision = ({ first, second }) => {
+    return (
+        first.attackBlock.position.x + first.attackBlock.width >= second.position.x
+        && first.attackBlock.position.x <= second.position.x + second.width
+        && first.attackBlock.position.y + first.attackBlock.height >= second.position.y
+        && first.attackBlock.position.y <= second.position.y + second.height
+    )
 }
 
 const animate = () => {
@@ -84,6 +123,24 @@ const animate = () => {
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
         enemy.velocity.x = enemy.moveSpeed
     }
+
+    // detect collision for player
+    if (rectangularCollision({
+        first: player,
+        second: enemy
+    }) && player.isAttacking) {
+        console.log('player attacking')
+        player.isAttacking = false
+    }
+
+    // detect collision for enemy
+    if (rectangularCollision({
+        first: enemy,
+        second: player
+    }) && enemy.isAttacking) {
+        console.log('enemy attacking')
+        enemy.isAttacking = false
+    }
 }
 
 const player = new Sprite({
@@ -97,7 +154,11 @@ const player = new Sprite({
     },
     color: 'red',
     moveSpeed: 5,
-    jumpSpeed: 20
+    jumpSpeed: 20,
+    offset: {
+        x: 0,
+        y: 0
+    }
 })
 
 const enemy = new Sprite({
@@ -111,11 +172,15 @@ const enemy = new Sprite({
     },
     color: 'blue',
     moveSpeed: 5,
-    jumpSpeed: 20
+    jumpSpeed: 20,
+    offset: {
+        x: -50,
+        y: 0
+    }
 })
 
 window.addEventListener('keydown', (event) => {
-    console.log(event.code)
+    //console.log(event.code)
     // player keys
     switch (event.code) {
         case 'KeyD':
@@ -132,6 +197,10 @@ window.addEventListener('keydown', (event) => {
             player.velocity.y = -player.jumpSpeed
             break
 
+        case 'Space':
+            player.attack()
+            break
+
         // enemy keys
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = true
@@ -145,6 +214,10 @@ window.addEventListener('keydown', (event) => {
 
         case 'ArrowUp':
             enemy.velocity.y = -enemy.jumpSpeed
+            break
+
+        case 'ControlRight':
+            enemy.attack()
             break
 
         default:
