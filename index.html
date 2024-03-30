@@ -13,13 +13,19 @@
 <div class="container">
     <div class="health_timer_container">
         <!--  player health  -->
-        <div id="player_health_bar" class="health_bar"></div>
+        <div class="health_bar_container_left">
+            <div class="health_bar_background_left"></div>
+            <div id="player_health_bar" class="health_bar_left"></div>
+        </div>
 
         <!--  timer  -->
         <div id="timer" class="timer"></div>
 
         <!--  enemy health  -->
-        <div id="enemy_health_bar" class="health_bar"></div>
+        <div class="health_bar_container_right">
+            <div class="health_bar_background_right"></div>
+            <div id="enemy_health_bar" class="health_bar_right"></div>
+        </div>
     </div>
 
     <canvas id="canvas"></canvas>

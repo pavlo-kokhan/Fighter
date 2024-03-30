@@ -50,6 +50,8 @@ class Sprite {
             height: 51
         }
         this.isAttacking = false
+        this.health = 100
+        this.damage = 20
     }
 
     draw() {
@@ -131,6 +133,8 @@ const animate = () => {
     }) && player.isAttacking) {
         console.log('player attacking')
         player.isAttacking = false
+        enemy.health -= player.damage
+        document.querySelector('#enemy_health_bar').style.width = enemy.health + '%'
     }
 
     // detect collision for enemy
@@ -140,6 +144,8 @@ const animate = () => {
     }) && enemy.isAttacking) {
         console.log('enemy attacking')
         enemy.isAttacking = false
+        player.health -= enemy.damage
+        document.querySelector('#player_health_bar').style.width = player.health + '%'
     }
 }
 
