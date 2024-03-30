@@ -1,13 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-.container {
-    position: relative;
-    display: inline-block;
-}
+.container { position: relative; display: inline-block; }
 
 .health_timer_container {
     position: absolute;
@@ -17,48 +10,16 @@
     padding: 20px;
 }
 
-.health_bar_container_right {
-    position: relative;
-    height: 30px;
-    width: 100%;
-}
+.health_bar_container_right, .health_bar_container_left { position: relative; height: 30px; width: 100%; }
+.health_bar_container_left { display: flex; justify-content: flex-end; }
 
-.health_bar_background_right {
-    background-color: yellow;
-    height: 30px;
-}
+.health_bar_background_right, .health_bar_background_left { background-color: yellow; height: 30px; }
+.health_bar_background_left { width: 100%; }
 
-.health_bar_right {
-    position: absolute;
-    background: blue;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
+.health_bar_right, .health_bar_left { position: absolute; background: blue; inset: 0 0 0 auto; }
 
-.health_bar_container_left {
-    position: relative;
-    height: 30px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.health_bar_background_left {
-    background-color: yellow;
-    height: 30px;
-    width: 100%;
-}
-
-.health_bar_left {
-    position: absolute;
-    background: blue;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-}
+.health_bar_right { inset: 0; }
+.health_bar_left { width: 100%; }
 
 .timer {
     background-color: red;
@@ -76,8 +37,5 @@
     display: none;
     justify-content: center;
     align-items: center;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
 }
