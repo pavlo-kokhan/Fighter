@@ -102,6 +102,34 @@ const rectangularCollision = ({ first, second }) => {
     )
 }
 
+const determineWinner = ({ player, enemy, timerId }) => {
+    clearTimeout(timerId)
+    const label = document.querySelector('#winner_label')
+
+    label.style.display = 'flex'
+    if (player.health === enemy.health) {
+        label.innerHTML = 'Tie'
+    } else if (player.health > enemy.health) {
+        label.innerHTML = 'Player 1 Wins'
+    } else if (enemy.health > player.health) {
+        label.innerHTML = 'Player 2 Wins'
+    }
+}
+
+let timer = parseInt(document.querySelector('#timer').innerHTML)
+let timerId
+const decreaseTimer = () => {
+    timerId = setTimeout(decreaseTimer, 1000)
+    if (timer > 0) {
+        timer--
+        document.querySelector('#timer').innerHTML = timer.toString()
+    }
+
+    if (timer === 0) {
+        determineWinner({ player, enemy, timerId })
+    }
+}
+
 const animate = () => {
     window.requestAnimationFrame(animate)
     context.fillStyle = 'black'
@@ -146,6 +174,11 @@ const animate = () => {
         enemy.isAttacking = false
         player.health -= enemy.damage
         document.querySelector('#player_health_bar').style.width = player.health + '%'
+    }
+
+    // end of the game based on health
+    if (player.health <= 0 || enemy.health <= 0) {
+        determineWinner({ player, enemy, timerId })
     }
 }
 
@@ -264,9 +297,5 @@ window.addEventListener('keyup', (event) => {
     }
 })
 
-context.fillRect(0, 0, canvas.width, canvas.height)
-
-player.draw()
-enemy.draw()
-
 animate()
+decreaseTimer()
