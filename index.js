@@ -38,6 +38,7 @@ const keys = {
     }
 }
 
+let reversed = false
 const animate = () => {
     window.requestAnimationFrame(animate)
     context.fillStyle = 'black'
@@ -63,8 +64,20 @@ const animate = () => {
         enemy.velocity.x = enemy.moveSpeed
     }
 
+    // players reverse check
+    if (checkPlayersPositionSwap({
+        first: player,
+        second: enemy
+    })) {
+        player.reversed = true
+        enemy.reversed = false
+    } else {
+        player.reversed = false
+        enemy.reversed = true
+    }
+
     // detect collision for player
-    if (rectangularCollision({
+    if (checkRectangularCollision({
         first: player,
         second: enemy
     }) && player.isAttacking) {
@@ -75,7 +88,7 @@ const animate = () => {
     }
 
     // detect collision for enemy
-    if (rectangularCollision({
+    if (checkRectangularCollision({
         first: enemy,
         second: player
     }) && enemy.isAttacking) {
@@ -106,7 +119,8 @@ const player = new Fighter({
     offset: {
         x: 0,
         y: 0
-    }
+    },
+    reversed: false
 })
 
 const enemy = new Fighter({
@@ -122,9 +136,10 @@ const enemy = new Fighter({
     moveSpeed: 5,
     jumpSpeed: 20,
     offset: {
-        x: -50,
+        x: 0,
         y: 0
-    }
+    },
+    reversed: false
 })
 
 window.addEventListener('keydown', (event) => {

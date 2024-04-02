@@ -1,4 +1,10 @@
-const rectangularCollision = ({ first, second }) => {
+const checkPlayersPositionSwap = ({ first, second }) => {
+    return (
+        first.position.x + first.width / 2 >= second.position.x + second.width / 2
+    )
+}
+
+const checkRectangularCollision = ({ first, second }) => {
     return (
         first.attackBlock.position.x + first.attackBlock.width >= second.position.x
         && first.attackBlock.position.x <= second.position.x + second.width

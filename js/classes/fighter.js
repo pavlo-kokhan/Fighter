@@ -20,6 +20,7 @@ class Fighter {
         this.isAttacking = false
         this.health = 100
         this.damage = 20
+        this.reversed = false
     }
 
     draw() {
@@ -40,6 +41,14 @@ class Fighter {
 
     update() {
         this.draw()
+
+        // check if fighter has to be reversed
+        if (this.reversed) {
+            this.attackBlock.offset.x = -this.attackBlock.width / 2
+        } else {
+            this.attackBlock.offset.x = 0
+        }
+
         this.attackBlock.position.x = this.position.x + this.attackBlock.offset.x
         this.attackBlock.position.y = this.position.y
 
